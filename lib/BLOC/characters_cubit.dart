@@ -1,22 +1,20 @@
 import 'package:bloc/bloc.dart';
+import 'package:breaking_bad_bloc/Data/Models/GOTCharacter.dart';
 import 'package:meta/meta.dart';
-
-import '../Data/Api_Web_Services/characters_api.dart';
-import '../Data/Models/character.dart';
-
+import '../Data/Repository/characters_repos.dart';
 part 'characters_state.dart';
 
 class CharactersCubit extends Cubit<CharactersState> {
-  final Api api;
-  List<Character> chars =[];
+  final GotCharacterRepository characterRepository;
+  List<GotCharacter> characters=[];
 
-  CharactersCubit(this.api) : super(CharactersInitial());
+  CharactersCubit(this.characterRepository) : super(CharactersInitial());
 
-  List<Character> getAllCharacters(){
-    api.getCharacters().then((characters){
-      emit(CharactersLoaded(characters!));
-      chars = characters;
+  List<GotCharacter> getAllCharacters(){
+    characterRepository.getAllCharacters().then((characters) {
+      emit(CharactersLoaded(characters));
+      this.characters = characters;
     });
-    return chars;
+    return characters;
   }
 }

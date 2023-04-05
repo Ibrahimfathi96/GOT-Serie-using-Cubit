@@ -1,13 +1,13 @@
 class Character {
-  int? id;
-  String? name;
-  String? status;
-  String? species;
-  String? type;
-  String? gender;
-  Origin? origin;
-  Location? location;
-  String? image;
+  late int id;
+  late String name;
+  late String status;
+  late String species;
+  late String type;
+  late String gender;
+  late Origin origin;
+  late Location location;
+  late String image;
 
   Character.fromJson(Map jsonMap)
       : id = jsonMap['id'],
@@ -22,17 +22,17 @@ class Character {
 }
 
 class Origin {
-  String? name;
+  late String name;
 
   Origin.fromJson(Map jsonMap) : name = valueOrDefaultValue(jsonMap['name']);
 }
 
 class Location {
-  String? name;
+  late String name;
 
   Location.fromJson(Map jsonMap) : name = valueOrDefaultValue(jsonMap['name']);
 }
 
 String valueOrDefaultValue(String value) {
-  return (value == null || value.isEmpty) ? "-" : value;
+  return (value.isEmpty) ? "-" : value;
 }

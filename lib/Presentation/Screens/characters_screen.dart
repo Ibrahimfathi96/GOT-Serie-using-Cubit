@@ -1,13 +1,14 @@
 import 'package:breaking_bad_bloc/BLOC/characters_cubit.dart';
+import 'package:breaking_bad_bloc/Data/Models/GOTCharacter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../Data/Models/character.dart';
 import '../../constants/colors.dart';
 import '../Widgets/character_item.dart';
 
 class CharactersScreen extends StatefulWidget {
   static const String routeName = 'char-screen';
+
+  const CharactersScreen({super.key});
 
   @override
   State<CharactersScreen> createState() => _CharactersScreenState();
@@ -15,9 +16,9 @@ class CharactersScreen extends StatefulWidget {
 
 class _CharactersScreenState extends State<CharactersScreen> {
 
-  late List<Character> allCharacters;
+  late List<GotCharacter> allCharacters;
 
-  late List<Character> findCharacter;
+  late List<GotCharacter> findCharacter;
 
   bool _isSearching = false;
 
@@ -26,7 +27,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CharactersCubit>(context).getAllCharacters();
+    allCharacters = BlocProvider.of<CharactersCubit>(context).getAllCharacters();
   }
 
   @override
@@ -38,22 +39,22 @@ class _CharactersScreenState extends State<CharactersScreen> {
         title: _isSearching? _buildSearchField(): _appBarTitle(),
         actions: _appBarActions(),
       ),
-      body: BuildBlocWidget(),
+      body: buildBlocWidget(),
     );
   }
 
   Widget _appBarTitle(){
     return const Text(
-      'Rick And Morty Characters',
+      'Game Of Thrones',
       style: TextStyle(color: MyColors.grey),
     );
   }
 
-  Widget BuildBlocWidget() {
+  Widget buildBlocWidget() {
     return BlocBuilder<CharactersCubit, CharactersState>(
       builder: (context, state) {
         if (state is CharactersLoaded) {
-          allCharacters = (state).characters;
+          allCharacters = (state).gotCharacters;
           return buildLoadedListWidget();
         } else {
           return const Center(
@@ -165,9 +166,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
   void addSearchedTextToSearchedList(String searchedCharacter) {
     findCharacter = allCharacters
         .where((character) =>
-            character.name!.toLowerCase().startsWith(searchedCharacter))
+            character.fullName.toLowerCase().startsWith(searchedCharacter))
         .toList();
-    print(findCharacter);
     setState(() {});
   }
 }
